@@ -1,3 +1,4 @@
+import datetime
 from times import time_range, overlap_time
 
 def test_given_input():
@@ -15,6 +16,20 @@ def test_class_time():
 
     assert result == obs2
 
+def test_multiple_time():
+    obs1 = time_range("2019-10-31 00:00:00", "2019-10-31 23:50:00", 24, 10 * 60)
+    obs2 = time_range("2019-10-31 00:30:00", "2019-10-31 23:55:00", 24, 35 * 60)
+
+    result = overlap_time(obs1, obs2)
+
+    for tr1, tr2 in result:
+        tr1_s = datetime.datetime.strptime(tr1, "%Y-%m-%d %H:%M:%S")
+        tr2_s = datetime.datetime.strptime(tr2, "%Y-%m-%d %H:%M:%S")
+        interval_length = (tr2_s - tr1_s).total_seconds()
+        # print(interval_length)
+        assert interval_length == 20 * 60
+
+
 # Testing Ideas
 # -------------
 # Intervals
@@ -30,4 +45,4 @@ def test_class_time():
 # The break length (sum of break lengths) isn't larger than one of the time ranges (or the overlap)
 
 if __name__ == "__main__":
-    test_given_input()
+    test_multiple_time()
