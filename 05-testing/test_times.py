@@ -2,7 +2,7 @@ from times import time_range, overlap_time
 
 def test_given_input():
     large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
-    short = time_range("2010-01-12 10:30:00", "2010-01-12 10:45:00", 3, 60)
+    short = time_range("2010-01-12 10:30:00", "2010-01-12 10:45:00", 2, 60)
 
     # print(overlap_time(large, short))
 
@@ -11,5 +11,4 @@ def test_given_input():
     assert result == expected
 
 if __name__ == "__main__":
-
     test_given_input()
