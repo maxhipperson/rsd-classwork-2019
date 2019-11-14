@@ -1,5 +1,5 @@
+#!/usr/bin/env python
 """Computation of weighted average of squares."""
-
 
 def average_of_squares(list_of_numbers, list_of_weights=None):
     """
@@ -50,14 +50,38 @@ def convert_numbers(list_of_strings):
 
 
 if __name__ == "__main__":
-    with open("numbers.txt", "r") as numbers_file:
+    from argparse import ArgumentParser
+    import math
+
+    parser = ArgumentParser(description="Computation of weighted average of squares.")
+    parser.add_argument("--numbers", "-n")
+    parser.add_argument("--weights", "-w")
+    parser.add_argument("--sqrt", "-q", action="store_true")
+    parser.add_argument("--save", "-s")
+
+    arguments = parser.parse_args()
+    print(arguments.numbers)
+
+    assert arguments.numbers is not None, "No numbers file specified as input!"
+
+    with open(arguments.numbers, "r") as numbers_file:
         numbers_strings = numbers_file.readlines()
-    # TODO Can we make this optional, so that we don't need a weights file?
-    with open("weights.txt", "r") as weights_file:
-        weight_strings = weights_file.readlines()
-    numbers = convert_numbers(numbers_strings)
-    weights = convert_numbers(weight_strings)
-    # TODO Can we add the option of computing the square root of this result?
-    result = average_of_squares(numbers, weights)
-    # TODO Can we write the result in a file instead of printing it?
-    print(result)
+        numbers = convert_numbers(numbers_strings)
+
+    if arguments.weights:
+        with open("weights.txt", "r") as weights_file:
+            weight_strings = weights_file.readlines()
+            weights = convert_numbers(weight_strings)
+    else:
+        weights = None
+
+    if arguments.sqrt:
+        result = math.sqrt(average_of_squares(numbers, weights))
+    else:
+        result = average_of_squares(numbers, weights)
+
+    if arguments.save:
+        with open("result.txt", "w") as savefile:
+            savefile.write(result)
+    else:
+        print(result)
